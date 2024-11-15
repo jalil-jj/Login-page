@@ -5,11 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./BootStrap/bootstrap.min.css">
     <link rel="stylesheet" href="./font Awsem/fontawesome-free-6.6.0-web/css/all.min.css">
+    <link rel="stylesheet" href="./style/index.css">
     <title>LoginPage</title>
 </head>
-<body>
+<body class="d-flex align-items-center justify-content-center back-ground h-100-vh">
     
+    <div class="w-75 p-5 border border-2 border-secondary rounded-2 d-flex align-items-center justify-content-center">
 
+        <form class="d-flex w-100 flex-column align-items-center justify-content-center gap-4">
+            <input class="w-75 bg-transparent p-2 rounded-2 user-name" maxlength="15" placeholder="Name" type="text">
+            <input class="w-75 bg-transparent p-2 rounded-2 user-famiy" maxlength="15" placeholder="Family" type="text">
+            <input class="w-75 bg-transparent p-2 rounded-2 user-number" maxlength="15" placeholder="Number" type="number">
+            <input class="w-75 bg-transparent p-2 rounded-2 user-pass" maxlength="15" placeholder="Password" type="password">
+            <input class="w-75 bg-transparent p-2 rounded-2 user-confirm" maxlength="15" placeholder="Confirm Password" type="password">
+            <button class="btn btn-outline-secondary w-50">Submit</button>
+        </form>
+
+    </div>
 
 
     <script src="./js/index.js"></script>
