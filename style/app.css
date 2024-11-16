@@ -1,0 +1,15 @@
+* {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+}
+
+.back-ground {
+    background: url(../img/menu-bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.h-100-vh {
+    height: 100vh;
+}
