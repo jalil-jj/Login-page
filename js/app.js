@@ -1,11 +1,19 @@
 let $ = document
 
 let containerDiv = $.querySelector('#container')
+let deleteModal = $.querySelector('#delete-modal')
+let editModal = $.querySelector('#edit-modal')
+
+let userName = $.querySelector('.firstname')
+let userFamily = $.querySelector('.lastname')
+let userNumber = $.querySelector('.userNumber')
+let userPass = $.querySelector('.password')
+let userConfirm = $.querySelector('.confirm')
 
 
 
 
-
+let userId = null
 
 
 
@@ -15,12 +23,13 @@ function getUsers() {
         .then(data => {
             let userData = Object.entries(data)
 
-
+            containerDiv.innerHTML = ''
 
             userData.forEach(item => {
 
+
                 containerDiv.insertAdjacentHTML('beforeend', `
-                
+
                <div class="w-100 d-flex align-items-center justify-content-between  border border-1 border-secondary p-2 mt-2">
 
                <img class="w-25" src="./img/img/noimg.png" alt="">
@@ -31,8 +40,8 @@ function getUsers() {
                </div>
    
                <div class="d-flex flex-column gap-2 align-items-center justify-content-center">
-                   <button class="btn btn-outline-danger">Delete</button>
-                   <button class="btn btn-outline-info">-Edit-</button>
+                   <button class="btn btn-outline-danger" onclick="openDeleteModal ('${item[0]}')" >Delete</button>
+                   <button class="btn btn-outline-info" onclick="openEditModal ('${item[0]}')">-Edit-</button>
                </div>
    
            </div>
@@ -42,7 +51,86 @@ function getUsers() {
 
 }
 
+function openDeleteModal(id) {
+
+    userId = id
+
+    deleteModal.classList.add('visible')
+}
+
+function closeDeleteModal() {
+    deleteModal.classList.remove('visible')
+}
+
+async function deleteUser() {
+
+   await fetch(`https://login-page-49b09-default-rtdb.firebaseio.com/users/${userId}.json`, {
+        method: 'DELETE'
+    })
+
+    closeDeleteModal()
+}
+
+function openEditModal(id) {
+
+    userId = id
+
+    editModal.classList.add('visible')
+
+}
+
+function closeEditModal() {
+    editModal.classList.remove('visible')
+}
+
+ function updateUser() {
 
 
+    if (!userName.value || !userFamily.value || !userNumber.value || !userPass.value || !userConfirm) {
+        alert('لطفا تمام فیلد هارا پر کنید!');
+        return;
+    }
+
+    if (userPass.value !== userConfirm.value) {
+        alert('رمز عبور و تایید رمز عبور یکسان نیستند!');
+        return;
+    }
+
+    let newUser = {
+        userName: userName.value,
+        userFamily: userFamily.value,
+        userNumber: userNumber.value,
+        userPass: userPass.value,
+        userConfirm: userConfirm.value,
+    }
+
+    fetch(`https://login-page-49b09-default-rtdb.firebaseio.com/users/${userId}.json`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newUser)
+    })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('ارسال اطلاعات موفقیت‌آمیز نبود!')
+            }
+            return res.json();
+        })
+        .then(data => {
+            console.log('اطلاعات با موفقیت ارسال شد:', data);
+            alert('طلاعات با موفقیت ارسال شد!')
+        })
+        .catch((error) => {
+            console.error('خطا در ارسال اطلاعات:', error);
+            alert('مشکلی در ارسال اطلاعات رخ داد!');
+        });
+
+
+
+
+
+    closeEditModal()
+}
 
 window.addEventListener('load', getUsers)
