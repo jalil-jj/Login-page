@@ -10,14 +10,15 @@ let userNumber = $.querySelector('.userNumber')
 let userPass = $.querySelector('.password')
 let userConfirm = $.querySelector('.confirm')
 
-
-
-
 let userId = null
 
+window.addEventListener('load', () => {
+    getAllUsers()
+})
 
+// Get User And Dom 
 
-function getUsers() {
+function getAllUsers() {
     fetch('https://login-page-49b09-default-rtdb.firebaseio.com/users.json')
         .then(res => res.json())
         .then(data => {
@@ -51,6 +52,8 @@ function getUsers() {
 
 }
 
+// Delete User
+
 function openDeleteModal(id) {
 
     userId = id
@@ -64,12 +67,17 @@ function closeDeleteModal() {
 
 async function deleteUser() {
 
-   await fetch(`https://login-page-49b09-default-rtdb.firebaseio.com/users/${userId}.json`, {
+    let res = await fetch(`https://login-page-49b09-default-rtdb.firebaseio.com/users/${userId}.json`, {
         method: 'DELETE'
     })
+        .then(res => {
+            getAllUsers()
+            closeDeleteModal()
+        })
 
-    closeDeleteModal()
 }
+
+// Edite User
 
 function openEditModal(id) {
 
@@ -83,7 +91,7 @@ function closeEditModal() {
     editModal.classList.remove('visible')
 }
 
- function updateUser() {
+function updateUser() {
 
 
     if (!userName.value || !userFamily.value || !userNumber.value || !userPass.value || !userConfirm) {
@@ -112,14 +120,8 @@ function closeEditModal() {
         body: JSON.stringify(newUser)
     })
         .then(res => {
-            if (!res.ok) {
-                throw new Error('ارسال اطلاعات موفقیت‌آمیز نبود!')
-            }
-            return res.json();
-        })
-        .then(data => {
-            console.log('اطلاعات با موفقیت ارسال شد:', data);
-            alert('طلاعات با موفقیت ارسال شد!')
+            getAllUsers()
+            clear()
         })
         .catch((error) => {
             console.error('خطا در ارسال اطلاعات:', error);
@@ -133,4 +135,13 @@ function closeEditModal() {
     closeEditModal()
 }
 
-window.addEventListener('load', getUsers)
+// Clrae Input 
+
+function clear() {
+    userConfirm.value = '',
+        userFamily.value = '',
+        userName.value = '',
+        userNumber.value = '',
+        userPass.value = ''
+}
+
